@@ -17,7 +17,8 @@ import { Input } from "@/components/ui/input";
 import { use, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-// import { createAccount, signInUser } from "@/lib/actions/user.actions";
+import { createAccount, signInUser } from "@/lib/actions/user.actions";
+import OtpModal from "./OtpModal";
 // import OtpModal from "./OtpModal";
 
 type Props = {
@@ -54,14 +55,14 @@ const AuthForm = ({ type }: Props) => {
     setErrorMessage("");
 
     try {
-      //   const user =
-      //     type === "sign-up"
-      //       ? await createAccount({
-      //           fullName: values.fullName || "",
-      //           email: values.email,
-      //         })
-      //       : await signInUser({ email: values.email });
-      //   setAccountId(user.accountId);
+      const user =
+        type === "sign-up"
+          ? await createAccount({
+              fullName: values.fullName || "",
+              email: values.email,
+            })
+          : await signInUser({ email: values.email });
+      setAccountId(user.accountId);
     } catch {
       setErrorMessage(
         "Erreur dans la création de compte. Veuillez ressayer dans quelques minutes."
@@ -158,9 +159,9 @@ const AuthForm = ({ type }: Props) => {
         </form>
       </Form>
 
-      {/* {accountId && (
+      {accountId && (
         <OtpModal email={form.getValues("email")} accountId={accountId} />
-      )} */}
+      )}
     </>
   );
 };
