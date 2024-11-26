@@ -6,6 +6,7 @@ import { appwriteConfig } from "../appwrite/config";
 import { avatarUrl } from "@/constants";
 import { parseStringify } from "../utils";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const getUserByEmail = async (email: string) => {
   const { databases } = await createAdminClient();
@@ -122,7 +123,28 @@ export const fetchCurrentUser = async () => {
 
     if (user.total <= 0) return null;
 
-    return parseStringify(user);
+    return parseStringify(user.documents[0]);
+  } catch (error) {
+    handleError(error, "Failed to fetch user.");
+  }
+};
+
+export const fetchUserById = async (id: string) => {
+  const { databases } = await createSessionClient();
+
+  try {
+    const user = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      [Query.equal("$id", id)]
+    );
+
+    if (user.total <= 0) {
+      redirect("/");
+      throw new Error("User not found.");
+    }
+
+    return parseStringify(user.documents[0]);
   } catch (error) {
     handleError(error, "Failed to fetch user.");
   }
