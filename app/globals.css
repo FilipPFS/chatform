@@ -25,4 +25,8 @@ body {
   .input-field {
     @apply rounded-md border-blue-900 border-opacity-20 w-[250px] h-[60px] md:w-[400px] lg:w-[500px] focus:border-none;
   }
+
+  .shad-otp-slot {
+    @apply text-[40px] font-medium rounded-xl text-blue-400 justify-center flex border-2 border-light-300 size-12 md:size-16 gap-5 !important;
+  }
 }

@@ -8,3 +8,27 @@ export interface UserType extends Models.Document {
   avatar: string;
   email: string;
 }
+
+export interface MessageType extends Models.Document {
+  senderId: {
+    $id: string;
+    email: string;
+    fullName: string;
+  };
+  body: string;
+  receiverId: string;
+}
+
+export interface Conversations {
+  messages: MessageType[];
+}
+
+export type GroupedMessages = {
+  [key: string]: MessageType[];
+};
+
+export type NewMessage = {
+  newMessage: string;
+  ownerId: string;
+  id: string;
+};

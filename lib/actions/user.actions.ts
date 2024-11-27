@@ -141,7 +141,6 @@ export const fetchUserById = async (id: string) => {
 
     if (user.total <= 0) {
       redirect("/");
-      throw new Error("User not found.");
     }
 
     return parseStringify(user.documents[0]);

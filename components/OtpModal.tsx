@@ -66,7 +66,7 @@ const OtpModal = ({
             Enter your OTP
             <FaXmark
               onClick={() => setIsOpen(false)}
-              className="absolute top-0 right-0"
+              className="absolute top-0 right-0 cursor-pointer"
             />
           </AlertDialogTitle>
           <AlertDialogDescription className="subtitle-2 text-center text-light-100">
