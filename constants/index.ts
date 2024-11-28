@@ -14,6 +14,7 @@ export interface MessageType extends Models.Document {
     $id: string;
     email: string;
     fullName: string;
+    avatar: string;
   };
   body: string;
   receiverId: string;

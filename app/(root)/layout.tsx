@@ -1,3 +1,4 @@
+import MobileHeader from "@/components/MobileHeader";
 import Sidebar from "@/components/Sidebar";
 import { Toaster } from "@/components/ui/toaster";
 import { UserProvider } from "@/context/UserContext";
@@ -16,7 +17,10 @@ const Layout = async ({ children }: { children: ReactNode }) => {
     <UserProvider currentUser={user}>
       <div className="flex min-h-screen">
         <Sidebar {...user} />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <MobileHeader />
+          {children}
+        </main>
         <Toaster />
       </div>
     </UserProvider>

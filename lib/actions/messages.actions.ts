@@ -10,6 +10,7 @@ import {
   NewMessage,
 } from "@/constants";
 import { parseStringify } from "../utils";
+import { fetchCurrentUser } from "./user.actions";
 
 export const fetchConversations = async (currentUserId: string) => {
   const { databases } = await createAdminClient();

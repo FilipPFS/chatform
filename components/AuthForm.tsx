@@ -143,7 +143,7 @@ const AuthForm = ({ type }: Props) => {
 
           {errorMessage && <p className="error-message">*{errorMessage}</p>}
 
-          <div className="body-2 flex justify-center">
+          <div className="body-2 flex flex-col sm:flex-row items-center justify-center">
             <p className="text-light-100">
               {type === "sign-in"
                 ? "Don't have an account?"

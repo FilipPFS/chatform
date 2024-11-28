@@ -28,7 +28,7 @@ const CopyId = ({ id }: { id: string }) => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-1 bg-gray-300 rounded-md w-fit px-2 py-1">
+    <div className="hidden lg:flex items-center justify-center gap-1 bg-gray-300 rounded-md w-fit px-2 py-1 ">
       <p className="text-[10px]">ID :</p>
       <p className="truncate text-[10px]">{id}</p>
       <FaCopy

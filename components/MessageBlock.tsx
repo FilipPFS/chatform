@@ -29,7 +29,7 @@ const MessageBlock = ({ message, ownerId }: Props) => {
       />
       <p
         className={clsx(
-          "rounded-full py-1 px-3",
+          "rounded-full py-1 px-3 text-center",
           message.senderId.$id === ownerId
             ? "bg-blue-200 order-1"
             : "bg-gray-200"

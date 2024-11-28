@@ -2,6 +2,7 @@
 
 import { createNewMessage } from "@/lib/actions/messages.actions";
 import React, { useState } from "react";
+import { FaPaperPlane } from "react-icons/fa6";
 
 type Props = {
   ownerId: string;
@@ -26,7 +27,7 @@ const CreateMessageForm = ({ ownerId, id }: Props) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-auto flex items-center gap-4 pt-4"
+      className="mt-auto flex items-center gap-2 sm:gap-4 pt-4"
     >
       <input
         value={newMessage}
@@ -36,9 +37,12 @@ const CreateMessageForm = ({ ownerId, id }: Props) => {
       />
       <button
         type="submit"
-        className="rounded-full h-10 px-7 text-white font-semibold bg-blue-600"
+        className="rounded-full h-10 w-10 sm:w-fit flex items-center justify-center px-7 text-white font-semibold bg-blue-600"
       >
-        Send
+        <p className="sm:block hidden">Send</p>
+        <p className="sm:hidden block">
+          <FaPaperPlane />
+        </p>
       </button>
     </form>
   );

@@ -55,7 +55,7 @@ const Chat = () => {
   }, [client, appwriteConfig.databaseId, appwriteConfig.messagesCollectionId]);
 
   return (
-    <div className="flex p-5 flex-col min-h-screen gap-5">
+    <div className="flex flex-col sm:min-h-screen min-h-[calc(100vh-80px)] p-4 gap-5">
       <header className="flex items-center gap-3">
         {user && (
           <>
@@ -70,17 +70,15 @@ const Chat = () => {
           </>
         )}
       </header>
-      <section className="bg-blue-100 overflow-hidden flex-1 flex flex-col rounded-sm p-4">
+      <section className="bg-blue-100 flex-1 flex flex-col rounded-sm p-4 overflow-hidden">
         <div className="flex-1 flex flex-col gap-3 overflow-y-auto">
-          {messages.map((message) => {
-            return (
-              <MessageBlock
-                key={message.$id}
-                message={message}
-                ownerId={ownerId}
-              />
-            );
-          })}
+          {messages.map((message) => (
+            <MessageBlock
+              key={message.$id}
+              message={message}
+              ownerId={ownerId}
+            />
+          ))}
         </div>
         <CreateMessageForm ownerId={ownerId} id={id} />
       </section>
