@@ -29,7 +29,8 @@ export type GroupedMessages = {
 };
 
 export type NewMessage = {
-  newMessage: string;
+  newMessage?: string;
+  imageUrl: string | null;
   ownerId: string;
   id: string;
 };

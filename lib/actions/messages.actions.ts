@@ -9,8 +9,13 @@ import {
   MessageType,
   NewMessage,
 } from "@/constants";
-import { parseStringify } from "../utils";
+import { constructFileUrl, extractFileId, parseStringify } from "../utils";
 import { fetchCurrentUser } from "./user.actions";
+
+const handleError = (error: unknown, message: string) => {
+  console.log(error);
+  throw error;
+};
 
 export const fetchConversations = async (currentUserId: string) => {
   const { databases } = await createAdminClient();
@@ -94,6 +99,7 @@ export const createNewMessage = async ({
   newMessage,
   ownerId,
   id,
+  imageUrl,
 }: NewMessage) => {
   const { databases } = await createAdminClient();
   try {
@@ -105,6 +111,7 @@ export const createNewMessage = async ({
         body: newMessage,
         senderId: ownerId,
         receiverId: id,
+        imageUrl,
       }
     );
 
@@ -116,8 +123,22 @@ export const createNewMessage = async ({
 };
 
 export const deleteMessage = async (messageId: string) => {
-  const { databases } = await createAdminClient();
+  const { databases, storage } = await createAdminClient();
   try {
+    const messageInDb = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.messagesCollectionId,
+      [Query.equal("$id", messageId)]
+    );
+
+    if (!messageInDb) throw new Error("Message with that ID doesn't exist.");
+
+    if (messageInDb.documents[0].imageUrl) {
+      const bucketFileId = extractFileId(messageInDb.documents[0].imageUrl);
+
+      await storage.deleteFile(appwriteConfig.bucketId, bucketFileId);
+    }
+
     const message = await databases.deleteDocument(
       appwriteConfig.databaseId,
       appwriteConfig.messagesCollectionId,
@@ -128,5 +149,25 @@ export const deleteMessage = async (messageId: string) => {
   } catch (error) {
     console.error("Error fetching conversations:", error);
     return;
+  }
+};
+
+export const updloadFile = async (file: File) => {
+  const { storage } = await createAdminClient();
+
+  try {
+    const uploadedFile = await storage.createFile(
+      appwriteConfig.bucketId,
+      ID.unique(),
+      file
+    );
+
+    const fileUrl = constructFileUrl(uploadedFile.$id);
+
+    if (!fileUrl) throw new Error("File Url doesn't exist.");
+
+    return fileUrl;
+  } catch (error) {
+    handleError(error, "Failed to upload file");
   }
 };

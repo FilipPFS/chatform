@@ -62,8 +62,8 @@ const Chat = () => {
   }, [client, appwriteConfig.databaseId, appwriteConfig.messagesCollectionId]);
 
   return (
-    <div className="flex flex-col sm:min-h-screen min-h-[calc(100vh-80px)] p-4 gap-5">
-      <header className="flex items-center gap-3">
+    <div className="flex flex-col sm:min-h-screen min-h-[calc(100vh-80px)] sm:p-4 sm:gap-5">
+      <header className="flex items-center gap-3 px-4 py-5 sm:px-0 sm:py-0">
         {user && (
           <>
             <Image
@@ -78,7 +78,7 @@ const Chat = () => {
         )}
       </header>
       <section className="bg-blue-100 flex-1 flex flex-col rounded-sm p-4 overflow-hidden">
-        <div className="flex-1 flex flex-col gap-3 overflow-y-auto">
+        <div className="flex-1 flex flex-col gap-4 overflow-y-auto">
           {messages.map((message) => (
             <MessageBlock
               key={message.$id}

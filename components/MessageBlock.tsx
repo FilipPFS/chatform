@@ -7,6 +7,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import React, { useState } from "react";
 import { FaTrash } from "react-icons/fa6";
+import OpenImage from "./OpenImage";
 
 type Props = {
   message: MessageType;
@@ -16,6 +17,7 @@ type Props = {
 const MessageBlock = ({ message, ownerId }: Props) => {
   const { currentUser } = useUser();
   const [clicked, setClicked] = useState(false);
+  const [imgClicked, setImgClicked] = useState(false);
   const isOwner = currentUser!.$id === message.senderId.$id;
 
   const handleSubmit = async (messageId: string) => {
@@ -44,29 +46,68 @@ const MessageBlock = ({ message, ownerId }: Props) => {
           message.senderId.$id === ownerId && "order-2"
         )}
       />
-      <p
-        onClick={() => setClicked((prev) => !prev)}
+      <div
         className={clsx(
-          "rounded-full py-1 px-3 text-center relative",
-          message.senderId.$id === ownerId
-            ? "bg-blue-200 order-1"
-            : "bg-gray-200"
+          "flex flex-col gap-2",
+          message.senderId.$id === ownerId ? "items-end" : "items-start"
         )}
+        onClick={() => setClicked((prev) => !prev)}
       >
-        {message.body}
-        {clicked && (
-          <>
-            {isOwner && (
-              <button
-                className="text-red-600 text-[10px] flex items-center gap-1 absolute right-0 pt-2 pl-4"
-                onClick={() => handleSubmit(message.$id)}
-              >
-                <FaTrash /> Delete
-              </button>
+        {message.body && (
+          <p
+            className={clsx(
+              "rounded-full py-1 px-5 relative",
+              message.senderId.$id === ownerId
+                ? "bg-blue-200 text-right"
+                : "bg-gray-200 text-left"
             )}
-          </>
+          >
+            {message.body}
+            {clicked && (
+              <>
+                {isOwner && !message.imageUrl && (
+                  <button
+                    className="text-red-600 text-[10px] flex items-center gap-1 absolute right-0 pt-2 pl-4"
+                    onClick={() => handleSubmit(message.$id)}
+                  >
+                    <FaTrash /> Delete
+                  </button>
+                )}
+              </>
+            )}
+          </p>
         )}
-      </p>
+        {message.imageUrl && (
+          <div className="relative">
+            <Image
+              src={message.imageUrl}
+              onClick={() => setImgClicked(true)}
+              alt="chat attachment"
+              width={200}
+              height={200}
+              className={clsx(
+                "rounded-md",
+                message.senderId.$id === ownerId ? "bg-blue-200" : "bg-gray-200"
+              )}
+            />
+            {clicked && (
+              <>
+                {isOwner && (
+                  <button
+                    className="text-red-600 text-[10px] z-10 flex items-center gap-1 absolute right-0 pt-1 pl-4"
+                    onClick={() => handleSubmit(message.$id)}
+                  >
+                    <FaTrash /> Delete
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </div>
+      {imgClicked && (
+        <OpenImage url={message.imageUrl} setImgClicked={setImgClicked} />
+      )}
     </div>
   );
 };
