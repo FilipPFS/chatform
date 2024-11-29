@@ -3,7 +3,13 @@
 import { useToast } from "@/hooks/use-toast";
 import { FaCheckCircle, FaCopy } from "react-icons/fa";
 
-const CopyId = ({ id }: { id: string }) => {
+const CopyId = ({
+  id,
+  isAccountPage,
+}: {
+  id: string;
+  isAccountPage?: boolean;
+}) => {
   const { toast } = useToast();
 
   const copyToClipboard = () => {
@@ -29,7 +35,7 @@ const CopyId = ({ id }: { id: string }) => {
 
   return (
     <div className="hidden lg:flex items-center justify-center gap-1 bg-gray-300 rounded-md w-fit px-2 py-1 ">
-      <p className="text-[10px]">ID :</p>
+      {!isAccountPage && <p className="text-[10px]">ID :</p>}
       <p className="truncate text-[10px]">{id}</p>
       <FaCopy
         className="text-[10px] ml-2 cursor-pointer"

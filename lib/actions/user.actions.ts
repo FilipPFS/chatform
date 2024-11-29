@@ -4,9 +4,10 @@ import { ID, Query } from "node-appwrite";
 import { createAdminClient, createSessionClient } from "../appwrite";
 import { appwriteConfig } from "../appwrite/config";
 import { avatarUrl } from "@/constants";
-import { parseStringify } from "../utils";
+import { constructFileUrl, parseStringify } from "../utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 const getUserByEmail = async (email: string) => {
   const { databases } = await createAdminClient();
@@ -144,6 +145,38 @@ export const fetchUserById = async (id: string) => {
     }
 
     return parseStringify(user.documents[0]);
+  } catch (error) {
+    handleError(error, "Failed to fetch user.");
+  }
+};
+
+export const updateAvatar = async (file: File) => {
+  const { databases, storage } = await createAdminClient();
+  const sessionUser = await fetchCurrentUser();
+
+  try {
+    const uploadedFile = await storage.createFile(
+      appwriteConfig.bucketId,
+      ID.unique(),
+      file
+    );
+
+    const fileUrl = constructFileUrl(uploadedFile.$id);
+
+    if (!fileUrl) throw new Error("File Url doesn't exist.");
+
+    const newAvatar = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      sessionUser.$id,
+      {
+        avatar: fileUrl,
+      }
+    );
+
+    revalidatePath("/my-account", "layout");
+
+    return { message: "Avatar updated successfully." };
   } catch (error) {
     handleError(error, "Failed to fetch user.");
   }

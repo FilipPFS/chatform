@@ -28,7 +28,10 @@ const Sidebar = async ({ fullName, $id, avatar }: Props) => {
   return (
     <div className="bg-custom-gradient lg:w-1/4 py-4 px-5 hidden sm:flex flex-col gap-3 items-center">
       <CreateConversation itemVisible={false} />
-      <section className="bg-white p-3 rounded-xl w-full flex flex-col gap-2">
+      <Link
+        href={"/my-account"}
+        className="bg-white p-3 rounded-xl w-full flex flex-col gap-2"
+      >
         <div className="flex items-center gap-2">
           <Image
             src={avatar}
@@ -40,7 +43,7 @@ const Sidebar = async ({ fullName, $id, avatar }: Props) => {
           <h2 className="truncate hidden lg:block">{fullName}</h2>
         </div>
         <CopyId id={$id} />
-      </section>
+      </Link>
       <section className="flex flex-col gap-4 w-full ">
         {conversations.map(async (conversation) => {
           return (
