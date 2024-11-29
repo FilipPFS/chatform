@@ -1,7 +1,12 @@
+"use client";
+
 import { MessageType } from "@/constants";
+import { useUser } from "@/context/UserContext";
+import { deleteMessage } from "@/lib/actions/messages.actions";
 import clsx from "clsx";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
+import { FaTrash } from "react-icons/fa6";
 
 type Props = {
   message: MessageType;
@@ -9,6 +14,18 @@ type Props = {
 };
 
 const MessageBlock = ({ message, ownerId }: Props) => {
+  const { currentUser } = useUser();
+  const [clicked, setClicked] = useState(false);
+  const isOwner = currentUser!.$id === message.senderId.$id;
+
+  const handleSubmit = async (messageId: string) => {
+    try {
+      const response = await deleteMessage(messageId);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div
       key={message.$id}
@@ -28,14 +45,27 @@ const MessageBlock = ({ message, ownerId }: Props) => {
         )}
       />
       <p
+        onClick={() => setClicked((prev) => !prev)}
         className={clsx(
-          "rounded-full py-1 px-3 text-center",
+          "rounded-full py-1 px-3 text-center relative",
           message.senderId.$id === ownerId
             ? "bg-blue-200 order-1"
             : "bg-gray-200"
         )}
       >
         {message.body}
+        {clicked && (
+          <>
+            {isOwner && (
+              <button
+                className="text-red-600 text-[10px] flex items-center gap-1 absolute right-0 pt-2 pl-4"
+                onClick={() => handleSubmit(message.$id)}
+              >
+                <FaTrash /> Delete
+              </button>
+            )}
+          </>
+        )}
       </p>
     </div>
   );

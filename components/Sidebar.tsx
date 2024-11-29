@@ -42,7 +42,7 @@ const Sidebar = async ({ fullName, $id, avatar }: Props) => {
           />
           <h2 className="truncate hidden lg:block">{fullName}</h2>
         </div>
-        <CopyId id={$id} />
+        <CopyId id={$id} isAccountPage={false} />
       </Link>
       <section className="flex flex-col gap-4 w-full ">
         {conversations.map(async (conversation) => {

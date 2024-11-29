@@ -114,3 +114,19 @@ export const createNewMessage = async ({
     return [];
   }
 };
+
+export const deleteMessage = async (messageId: string) => {
+  const { databases } = await createAdminClient();
+  try {
+    const message = await databases.deleteDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.messagesCollectionId,
+      messageId
+    );
+
+    return parseStringify({ message: "Message deleted." });
+  } catch (error) {
+    console.error("Error fetching conversations:", error);
+    return;
+  }
+};

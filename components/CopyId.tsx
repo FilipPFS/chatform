@@ -1,6 +1,7 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
+import clsx from "clsx";
 import { FaCheckCircle, FaCopy } from "react-icons/fa";
 
 const CopyId = ({
@@ -34,7 +35,12 @@ const CopyId = ({
   };
 
   return (
-    <div className="hidden lg:flex items-center justify-center gap-1 bg-gray-300 rounded-md w-fit px-2 py-1 ">
+    <div
+      className={clsx(
+        "flex items-center justify-center gap-1 bg-gray-300 rounded-md w-fit px-2 py-1",
+        !isAccountPage && "hidden lg:flex"
+      )}
+    >
       {!isAccountPage && <p className="text-[10px]">ID :</p>}
       <p className="truncate text-[10px]">{id}</p>
       <FaCopy
