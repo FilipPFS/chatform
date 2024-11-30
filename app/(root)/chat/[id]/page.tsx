@@ -4,14 +4,11 @@ import { MessageType, UserType } from "@/constants";
 import { fetchUserById } from "@/lib/actions/user.actions";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
-import client, { databases } from "@/lib/appwrite/client";
+import client from "@/lib/appwrite/client";
 import { useUser } from "@/context/UserContext";
-import {
-  createNewMessage,
-  fetchMessagesWithUser,
-} from "@/lib/actions/messages.actions";
+import { fetchMessagesWithUser } from "@/lib/actions/messages.actions";
 import MessageBlock from "@/components/MessageBlock";
 import CreateMessageForm from "@/components/CreateMessageForm";
 import { RealtimeResponseEvent } from "appwrite";
@@ -23,6 +20,14 @@ const Chat = () => {
   const [user, setUser] = useState<UserType | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const ownerId = currentUser!.$id;
+
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   if (id === ownerId) {
     throw new Error("You can not message yourself.");
@@ -44,6 +49,8 @@ const Chat = () => {
     const unsubscribe = client.subscribe(
       `databases.${appwriteConfig.databaseId}.collections.${appwriteConfig.messagesCollectionId}.documents`,
       (event: RealtimeResponseEvent<MessageType>) => {
+        console.log(event);
+
         if (
           event.events.includes("databases.*.collections.*.documents.*.create")
         ) {
@@ -62,7 +69,7 @@ const Chat = () => {
   }, [client, appwriteConfig.databaseId, appwriteConfig.messagesCollectionId]);
 
   return (
-    <div className="flex flex-col sm:min-h-screen min-h-[calc(100vh-80px)] sm:p-4 sm:gap-5">
+    <div className="flex flex-col sm:min-h-screen min-h-[calc(100vh-80px)] max-h-screen sm:p-4 sm:gap-5 overflow-hidden">
       <header className="flex items-center gap-3 px-4 py-5 sm:px-0 sm:py-0">
         {user && (
           <>
@@ -77,8 +84,8 @@ const Chat = () => {
           </>
         )}
       </header>
-      <section className="bg-blue-100 flex-1 flex flex-col rounded-sm p-4 overflow-hidden">
-        <div className="flex-1 flex flex-col gap-4 overflow-y-auto">
+      <section className="bg-blue-100 flex-1 flex flex-col rounded-sm p-4 overflow-auto">
+        <div className="flex-1 flex flex-col gap-4 overflow-y-auto remove-scrollbar">
           {messages.map((message) => (
             <MessageBlock
               key={message.$id}
@@ -86,6 +93,7 @@ const Chat = () => {
               ownerId={ownerId}
             />
           ))}
+          <div ref={messagesEndRef} />
         </div>
         <CreateMessageForm ownerId={ownerId} id={id} />
       </section>
