@@ -181,3 +181,51 @@ export const updateAvatar = async (file: File) => {
     handleError(error, "Failed to fetch user.");
   }
 };
+
+export const blockUser = async (userId: string) => {
+  const { databases } = await createAdminClient();
+  const sessionUser = await fetchCurrentUser();
+
+  try {
+    const blockUser = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      sessionUser.$id,
+      {
+        blockedUsers: [...sessionUser.blockedUsers, userId],
+      }
+    );
+
+    revalidatePath("/chat/*", "layout");
+
+    return { message: "User blocked successfully." };
+  } catch (error) {
+    handleError(error, "Failed to fetch user.");
+  }
+};
+
+export const unblockUser = async (userId: string) => {
+  const { databases } = await createAdminClient();
+  const sessionUser = await fetchCurrentUser();
+
+  try {
+    const newBlockedUsers = sessionUser.blockedUsers.filter(
+      (blockedId: string) => blockedId !== userId
+    );
+
+    const blockUser = await databases.updateDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.usersCollectionId,
+      sessionUser.$id,
+      {
+        blockedUsers: newBlockedUsers,
+      }
+    );
+
+    revalidatePath("/chat/*", "layout");
+
+    return { message: "User unblocked successfully." };
+  } catch (error) {
+    handleError(error, "Failed to fetch user.");
+  }
+};

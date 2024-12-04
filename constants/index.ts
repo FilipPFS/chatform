@@ -7,6 +7,7 @@ export interface UserType extends Models.Document {
   fullName: string;
   avatar: string;
   email: string;
+  blockedUsers: string[];
 }
 
 export interface MessageType extends Models.Document {
