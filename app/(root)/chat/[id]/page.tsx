@@ -106,12 +106,16 @@ const Chat = () => {
         ) {
           const updatedUser = event.payload;
 
+          console.log(updatedUser);
+
           if (
             updatedUser.blockedUsers.length > 0 &&
             updatedUser.blockedUsers.includes(ownerId) &&
             updatedUser.$id === id
           ) {
             setSessionUserBlocked(true);
+          } else {
+            setSessionUserBlocked(false);
           }
         }
       }
