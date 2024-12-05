@@ -1,13 +1,12 @@
 import ChangeAvatar from "@/components/ChangeAvatar";
 import CopyId from "@/components/CopyId";
+import SingOutButton from "@/components/SingOutButton";
 import { UserType } from "@/constants";
 import { fetchCurrentUser } from "@/lib/actions/user.actions";
-import Image from "next/image";
 import React from "react";
 
 const MyAccount = async () => {
   const account: UserType = await fetchCurrentUser();
-  const blocked = [];
 
   return (
     <div>
@@ -26,13 +25,8 @@ const MyAccount = async () => {
           ID: <CopyId id={account.$id} isAccountPage={true} />
         </div>
       </section>
-      <section className="p-5 flex flex-col gap-3">
-        <h1 className="text-2xl">Blocked Users</h1>
-        {blocked.length > 0 ? (
-          <p>Blocked Users</p>
-        ) : (
-          <p>You don't have anything here.</p>
-        )}
+      <section className="p-5 flex flex-col gap-3 w-full sm:w-[300px]">
+        <SingOutButton />
       </section>
     </div>
   );

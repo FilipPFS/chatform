@@ -18,7 +18,7 @@ const Layout = async ({ children }: { children: ReactNode }) => {
       <div className="flex min-h-screen">
         <Sidebar {...user} />
         <main className="flex-1">
-          <MobileHeader />
+          <MobileHeader avatar={user.avatar} />
           {children}
         </main>
         <Toaster />

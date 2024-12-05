@@ -85,6 +85,19 @@ export const signInUser = async ({ email }: { email: string }) => {
   }
 };
 
+export const signOutUser = async () => {
+  const { account } = await createSessionClient();
+
+  try {
+    await account.deleteSession("current");
+    (await cookies()).delete("appwrite-session");
+  } catch (error) {
+    handleError(error, "Failed to sing out user");
+  } finally {
+    redirect("/sign-in");
+  }
+};
+
 export const verifySecret = async ({
   accountId,
   password,

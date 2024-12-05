@@ -32,10 +32,7 @@ const Home = async (props: Props) => {
       </div>
       <div className="sm:hidden flex flex-col sm:min-h-screen min-h-[calc(100vh-80px)] p-4 gap-5">
         <section className="flex gap-4 items-center justify-between h-10">
-          <SearchForm />
-          <div>
-            <CreateConversation itemVisible={false} />
-          </div>
+          <CreateConversation itemVisible={false} />
         </section>
         <section className="flex flex-col gap-4 w-full ">
           {conversations.map(async (conversation) => {

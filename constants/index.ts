@@ -35,3 +35,7 @@ export type NewMessage = {
   ownerId: string;
   id: string;
 };
+
+export interface Conversation {
+  [key: string]: MessageType; // Key is the conversation ID, value is the latest message
+}

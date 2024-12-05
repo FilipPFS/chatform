@@ -32,7 +32,7 @@ const SingleConversation = async ({ $id, conversation, sidebar }: Props) => {
 
   return (
     <Link
-      className="flex flex-col gap-3 w-full p-3 rounded-lg shadow-sm bg-blue-100 relative"
+      className="flex flex-col gap-3 w-full p-3 pt-4 rounded-lg shadow-sm bg-blue-100 relative"
       href={`/chat/${notCurrentUserId}`}
     >
       <section className="flex items-center gap-3">

@@ -39,9 +39,9 @@ const CreateConversation = ({ itemVisible }: Props) => {
 
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialogTrigger className="flex items-center gap-2 justify-center bg-blue-700 w-10 h-10 sm:w-full sm:p-2 rounded-full sm:rounded-lg  text-white font-semibold text-sm">
+      <AlertDialogTrigger className="flex items-center gap-2 justify-center bg-blue-700 h-10 w-full sm:p-2 rounded-lg  text-white font-semibold text-sm">
         <FaPenToSquare />
-        <p className={clsx("lg:block hidden", itemVisible && "sm:block")}>
+        <p className={clsx("lg:block sm:hidden", itemVisible && "block")}>
           Start a conversation
         </p>
       </AlertDialogTrigger>

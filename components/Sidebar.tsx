@@ -7,10 +7,8 @@ import {
 } from "@/lib/actions/messages.actions";
 import { MessageType, UserType } from "@/constants";
 import Link from "next/link";
-import { fetchUserById } from "@/lib/actions/user.actions";
-import { formatDistanceToNow } from "date-fns";
-import { enUS } from "date-fns/locale";
 import SingleConversation from "./SingleConversation";
+import SingOutButton from "./SingOutButton";
 
 type Props = {
   fullName: string;

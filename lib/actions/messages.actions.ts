@@ -4,6 +4,7 @@ import { Databases, ID, Query } from "node-appwrite";
 import { createAdminClient } from "../appwrite";
 import { appwriteConfig } from "../appwrite/config";
 import {
+  Conversation,
   Conversations,
   GroupedMessages,
   MessageType,
@@ -19,6 +20,7 @@ const handleError = (error: unknown, message: string) => {
 
 export const fetchConversations = async (currentUserId: string) => {
   const { databases } = await createAdminClient();
+
   try {
     const conversations = await databases.listDocuments(
       appwriteConfig.databaseId,
@@ -28,10 +30,26 @@ export const fetchConversations = async (currentUserId: string) => {
           Query.equal("senderId", [currentUserId]),
           Query.contains("receiverId", [currentUserId]),
         ]),
+        Query.orderDesc("$createdAt"), // Sort by $createdAt in descending order
       ]
     );
 
-    return conversations.documents as MessageType[];
+    const messages = conversations.documents as MessageType[];
+    const latestMessages = new Map<string, MessageType>();
+
+    messages.forEach((message) => {
+      const participantsKey =
+        message.senderId.$id < message.receiverId
+          ? `${message.senderId.$id}-${message.receiverId}`
+          : `${message.receiverId}-${message.senderId.$id}`;
+
+      if (!latestMessages.has(participantsKey)) {
+        latestMessages.set(participantsKey, message);
+      }
+    });
+
+    console.log("ARRAY", Array.from(latestMessages.values()));
+    return Array.from(latestMessages.values());
   } catch (error) {
     console.error("Error fetching conversations:", error);
     return [];
